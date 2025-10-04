@@ -1,14 +1,11 @@
 workflows:
-  react-native-ios:
-    name: React Native iOS Build (Ad-Hoc/Teste)
+  react-native-ios-simulator:
+    name: React Native iOS Debug (Simulador)
     environment:
       xcode: latest
       node: 20
       npm: default
       cocoapods: default
-      ios_signing:
-        distribution_type: ad_hoc   # ad_hoc para instalar em dispositivos de teste
-        bundle_identifier: com.seuapp.bundle
     cache:
       cache_paths:
         - $HOME/Library/Caches/CocoaPods
@@ -21,20 +18,13 @@ workflows:
         script: |
           cd ios
           pod install
-      - name: Build iOS com Xcode
+      - name: Build para simulador (Debug)
         script: |
           xcodebuild \
             -workspace ios/SeuProjeto.xcworkspace \
             -scheme SeuProjeto \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath $CM_BUILD_DIR/build/SeuProjeto.xcarchive archive
-
-          xcodebuild \
-            -exportArchive \
-            -archivePath $CM_BUILD_DIR/build/SeuProjeto.xcarchive \
-            -exportOptionsPlist ios/exportOptions.plist \
-            -exportPath $CM_BUILD_DIR/build/ipa
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath $CM_BUILD_DIR/build
     artifacts:
-      - $CM_BUILD_DIR/build/ipa/*.ipa
-      - $CM_BUILD_DIR/build/*.xcarchive
+      - $CM_BUILD_DIR/build/Build/Products/Debug-iphonesimulator/**/*.app
