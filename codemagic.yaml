@@ -16,11 +16,11 @@ workflows:
       - name: Instalar dependências iOS
         script: |
           cd ios
-          pod install || echo "Sem Pods para instalar"
+          pod install
       - name: Build para simulador (Debug)
         script: |
           xcodebuild \
-            -project ios/ProjetoReactNative.xcodeproj \
+            -workspace ios/ProjetoReactNative.xcworkspace \
             -scheme ProjetoReactNative \
             -configuration Debug \
             -sdk iphonesimulator \
