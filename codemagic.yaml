@@ -20,8 +20,8 @@ workflows:
       - name: Build para simulador (Debug)
         script: |
           xcodebuild \
-            -workspace ios/SeuProjeto.xcworkspace \
-            -scheme SeuProjeto \
+            -workspace ios/ProjetoReactNative.xcworkspace \
+            -scheme ProjetoReactNative \
             -configuration Debug \
             -sdk iphonesimulator \
             -derivedDataPath $CM_BUILD_DIR/build
