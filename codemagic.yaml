@@ -1,5 +1,40 @@
 workflows:
-    sample-workflow:
-        name: Codemagic Sample Workflow
-        max_build_duration: 120
-        instance_type: mac_mini_m2
+  react-native-ios:
+    name: React Native iOS Build (Ad-Hoc/Teste)
+    environment:
+      xcode: latest
+      node: 20
+      npm: default
+      cocoapods: default
+      ios_signing:
+        distribution_type: ad_hoc   # ad_hoc para instalar em dispositivos de teste
+        bundle_identifier: com.seuapp.bundle
+    cache:
+      cache_paths:
+        - $HOME/Library/Caches/CocoaPods
+        - node_modules
+    scripts:
+      - name: Instalar dependências JS
+        script: |
+          npm install
+      - name: Instalar dependências iOS
+        script: |
+          cd ios
+          pod install
+      - name: Build iOS com Xcode
+        script: |
+          xcodebuild \
+            -workspace ios/SeuProjeto.xcworkspace \
+            -scheme SeuProjeto \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $CM_BUILD_DIR/build/SeuProjeto.xcarchive archive
+
+          xcodebuild \
+            -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/SeuProjeto.xcarchive \
+            -exportOptionsPlist ios/exportOptions.plist \
+            -exportPath $CM_BUILD_DIR/build/ipa
+    artifacts:
+      - $CM_BUILD_DIR/build/ipa/*.ipa
+      - $CM_BUILD_DIR/build/*.xcarchive
