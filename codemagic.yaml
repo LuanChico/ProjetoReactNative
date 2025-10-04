@@ -4,7 +4,6 @@ workflows:
     environment:
       xcode: latest
       node: 20
-      npm: default
       cocoapods: default
     cache:
       cache_paths:
